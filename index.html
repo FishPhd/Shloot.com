@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shloot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <script async src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script type="text/javascript">
+        var totalCount = 6;
+
+        function ChangeIt() {
+            var num = Math.ceil(Math.random() * totalCount);
+            document.body.background = '/img/' + num + '.png';
+        }
+
+        function formSubmit(e) {
+            e.preventDefault();
+            var x = document.getElementById('email2').value;
+            var atpos = x.indexOf("@");
+            var dotpos = x.lastIndexOf(".");
+            if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= x.length) {
+                $("#email2").attr("placeholder", "Invalid Email").val("").focus().blur();
+            } else {
+                document.getElementById('captcha').style.display = 'block';
+            }
+        }
+
+        function recaptchaCallback() {
+            var dataString = '&email=' + document.getElementById('email').value +
+                '&email2=' + document.getElementById('email2').value;
+
+            $.ajax({
+                type: "POST",
+                url: "form.php",
+                data: dataString
+            });
+            document.getElementById('captcha').style.display = 'none';
+            document.getElementById('email2').value = "";
+            document.getElementById('email').value = "";
+            $("#email2").attr("placeholder", "Thanks!").val("").focus().blur();
+            grecaptcha.reset();
+        };
+
+        function trello() {
+            document.getElementById('TrelloIframe').style.display = "inline";
+            document.getElementById('pg-header').style.paddingTop = "5vh";
+        }
+    </script>
+</head>
+
+<body>
+    <div id="bg">
+        <section id="pg-header" class="page-header" style="padding-top: 30vh;">
+            <!-- style="padding-top: 30vh;"-->
+            <h1 class="project-name" style="font-weight: 100; font-size: 4.9em;">SHLOOT</h1>
+            <h2 class="project-tagline" style="font-weight: 100; font-size: 1.5em; margin-top: 0px; opacity: 0.6;">The Sharena Shooter</h2>
+            <a href="https://trello.com/c/XRZdKD5M/23-what-is-shloot" class="btn">What is Shloot?</a>
+            <!--<input type="button" onclick="trello();" value="Trello" class="btn">-->
+            <a href="https://twitter.com/ShlootGame" class="btn">Twitter</a>
+            </br>
+            <iframe id="TrelloIframe" src="https://trello.com/b/859Orl48.html" frameBorder="0" width="60%" style="display: none;" height="400px"></iframe>
+
+            <form id="form" style="margin-top: 2vh;" action="form.php" method="post">
+                <!--<label style="font-size: 18px;"></label>-->Email:
+                <input type="email" name="email2" autocomplete="off" id="email2" placeholder="Stay up to date" style="background: transparent; border: none; border-bottom: 1px solid white; margin-left: 0.5vw">
+                <input type="submit" id="submit" onclick="formSubmit(event)" value="Subscribe" style="margin-left: 0.5vw; margin-top: 20px; font-size: 14px;" class="btn">
+                <input type="email" id="email" name="email" placeholder="leaveBlank">
+                <div align="center" id="captcha">
+                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LeFbQkUAAAAAJeFHAy7JMzzlOqE3aZkX3nERvXO"></div>
+                </div>
+            </form>
+        </section>
+    </div>
+    <!--<section class="main-content">
+        <footer class="site-footer">
+            <span class="site-footer-owner"><a href="https://github.com/FishPhd/Shloot.com">Shloot.com</a> is maintained by <a href="https://github.com/FishPhd">FishPhd</a>.</span>
+        </footer>
+    </section>-->
+</body>
+<script type="text/javascript">
+    ChangeIt();
+</script>
+
+</html>
